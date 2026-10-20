@@ -212,8 +212,10 @@ The suite measures:
 
 ## Current Qwen3 8B baseline
 
-# EVAL SCORECARD
-
+```text
+==========================
+       EVAL SCORECARD
+==========================
 Overall: 8/8
 Tool routing: 8/8
 Answer quality: 8/8
@@ -222,6 +224,8 @@ Average steps: 2.0
 Average latency: 5637 ms
 Extra tool calls: 2
 ==========================
+```
+
 These evals cover cases including:
 shipment lookup
 order item lookup
