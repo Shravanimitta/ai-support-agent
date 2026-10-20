@@ -33,52 +33,60 @@ User: Can I get a refund for it?
 
 Agent:
 Which order do you mean, ORD-123 or ORD-456?
-Architecture
+
+## Architecture
+
 ```mermaid
 flowchart LR
-U[React / Next.js UI] --> A[Next.js Chat API]
+    U["React / Next.js UI"] --> A["Next.js Chat API"]
+    A --> L["Qwen3 8B via Ollama"]
 
-        A --> L[Qwen3 8B via Ollama]
+    L -->|tool call| O["get_order"]
+    L -->|tool call| S["get_shipment"]
+    L -->|tool call| P["search_policy"]
 
-        L -->|tool call| O[get_order]
-        L -->|tool call| S[get_shipment]
-        L -->|tool call| P[search_policy]
+    O --> D1["Order Data"]
+    S --> D2["Shipment Data"]
 
-        O --> D1[Order Data]
-        S --> D2[Shipment Data]
+    P --> R["RAG Pipeline"]
+    R --> E["nomic-embed-text"]
+    R --> K["Markdown Policy Documents"]
 
-        P --> R[RAG Pipeline]
-        R --> E[nomic-embed-text]
-        R --> K[Markdown Policy Documents]
+    O --> A
+    S --> A
+    P --> A
 
-        O --> A
-        S --> A
-        P --> A
+    A --> G["Deterministic Guardrails"]
+    G --> F["Final Grounded Response"]
+    F -->|streamed text| U
 
-        A --> G[Deterministic Guardrails]
-        G --> F[Final Grounded Response]
-        F -->|streamed text| U
+    T["Automated Eval Suite"] --> A
+```
 
-        T[Automated Eval Suite] --> A
-    ```
-    Request flow
-    User message
-        ↓
-    Conversation context
-        ↓
-    LLM decides what information is needed
-        ↓
-    Application executes read-only tools
-        ↓
-    Order / shipment data + retrieved policy
-        ↓
-    Deterministic guardrails validate required context
-        ↓
-    LLM produces a grounded customer-facing answer
-        ↓
-    Final response streams to the browser
+### Request flow
 
-Why this project is interesting?
+```text
+User message
+    ↓
+Conversation context
+    ↓
+LLM decides what information is needed
+    ↓
+Application executes read-only tools
+    ↓
+Order / shipment data + retrieved policy
+    ↓
+Deterministic guardrails validate required context
+    ↓
+LLM produces a grounded customer-facing answer
+    ↓
+Final response streams to the browser
+```
+
+---
+
+## Why this project is interesting?
+
 A basic LLM application might send a prompt and display the response.
 This project adds the engineering layers needed for a more reliable agent.
 
@@ -150,7 +158,8 @@ current shipment state
   This is one of the core design principles in the project:
   Use the LLM for language and flexible reasoning. Use deterministic application logic for rules that must not be guessed.
 
-Grounding rules
+## Grounding rules
+
 The agent is instructed to:
 
 - Use tool results and retrieved policy as the source of truth
@@ -200,10 +209,11 @@ The suite measures:
 - Number of agent steps
 - Extra tool calls
 - End-to-end latency
-  Current Qwen3 8B baseline
-  ==========================
-  EVAL SCORECARD
-  ==========================
+
+  # Current Qwen3 8B baseline
+
+  # EVAL SCORECARD
+
   Overall: 8/8
   Tool routing: 8/8
   Answer quality: 8/8
@@ -228,7 +238,8 @@ The suite measures:
   That experiment reinforced an important lesson:
   Smaller model size does not automatically mean lower end-to-end latency. Output length, tool behavior, runtime templates, and the number of inference passes also matter.
 
-Tech stack
+## Tech stack
+
 Application
 
 - Next.js
@@ -288,7 +299,8 @@ Application
   ├── package.json
   ├── tsconfig.json
   └── README.md
-  Running locally
+
+  ## Running locally
 
 1. Install Node dependencies
    npm install
@@ -329,7 +341,9 @@ Application
    }
    ]
    }'
-   Key engineering lessons
+
+   ## Key engineering lessons
+
    LLMs should not be the database.
    Operational facts come from application tools.
    RAG retrieval quality matters.
@@ -358,5 +372,6 @@ Application
   Resume summary
   Built a local AI customer-support agent with Next.js, TypeScript, Qwen3/Ollama, tool calling and RAG; implemented conversational context, deterministic grounding guardrails, streaming responses, timeout/error handling, and an automated evaluation suite achieving 100% accuracy across core tool-routing and response-quality scenarios.
 
-About
+## About
+
 This project was built as a hands-on exploration of production-oriented AI application engineering: combining LLM reasoning with application tools, retrieval, guardrails, evaluation, and frontend/backend product behavior.
