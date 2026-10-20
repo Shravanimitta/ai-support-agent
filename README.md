@@ -210,33 +210,33 @@ The suite measures:
 - Extra tool calls
 - End-to-end latency
 
-  # Current Qwen3 8B baseline
+## Current Qwen3 8B baseline
 
-  # EVAL SCORECARD
+### EVAL SCORECARD
 
-  Overall: 8/8
-  Tool routing: 8/8
-  Answer quality: 8/8
-  Accuracy: 100%
-  Average steps: 2.0
-  Average latency: 5637 ms
-  Extra tool calls: 2
-  ==========================
-  These evals cover cases including:
-  shipment lookup
-  order item lookup
-  refund eligibility
-  missing order ID
-  unknown order
-  multi-source questions
-  conversation memory
-  multi-order comparison
-  Model experiment: 8B vs 4B
-  The same eval framework was used to investigate model/runtime tradeoffs.
-  qwen3:8b produced the strongest end-to-end result for this application.
-  The smaller qwen3:4b model was tested as a potential latency optimization, but in the local Ollama setup it generated long reasoning traces before the final answer. This made it slower at the application level despite having fewer parameters.
-  That experiment reinforced an important lesson:
-  Smaller model size does not automatically mean lower end-to-end latency. Output length, tool behavior, runtime templates, and the number of inference passes also matter.
+Overall: 8/8
+Tool routing: 8/8
+Answer quality: 8/8
+Accuracy: 100%
+Average steps: 2.0
+Average latency: 5637 ms
+Extra tool calls: 2
+==========================
+These evals cover cases including:
+shipment lookup
+order item lookup
+refund eligibility
+missing order ID
+unknown order
+multi-source questions
+conversation memory
+multi-order comparison
+Model experiment: 8B vs 4B
+The same eval framework was used to investigate model/runtime tradeoffs.
+qwen3:8b produced the strongest end-to-end result for this application.
+The smaller qwen3:4b model was tested as a potential latency optimization, but in the local Ollama setup it generated long reasoning traces before the final answer. This made it slower at the application level despite having fewer parameters.
+That experiment reinforced an important lesson:
+Smaller model size does not automatically mean lower end-to-end latency. Output length, tool behavior, runtime templates, and the number of inference passes also matter.
 
 ## Tech stack
 
