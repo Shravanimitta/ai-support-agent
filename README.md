@@ -212,7 +212,7 @@ The suite measures:
 
 ## Current Qwen3 8B baseline
 
-### EVAL SCORECARD
+# EVAL SCORECARD
 
 Overall: 8/8
 Tool routing: 8/8
